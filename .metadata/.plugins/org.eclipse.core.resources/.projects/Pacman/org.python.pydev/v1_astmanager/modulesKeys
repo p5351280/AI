@@ -1,0 +1,14 @@
+MODULES_MANAGER_V2
+eightpuzzle|/Users/Shuo-En/eclipse-workspace/Pacman/eightpuzzle.py
+game|/Users/Shuo-En/eclipse-workspace/Pacman/game.py
+ghostAgents|/Users/Shuo-En/eclipse-workspace/Pacman/ghostAgents.py
+graphicsDisplay|/Users/Shuo-En/eclipse-workspace/Pacman/graphicsDisplay.py
+graphicsUtils|/Users/Shuo-En/eclipse-workspace/Pacman/graphicsUtils.py
+keyboardAgents|/Users/Shuo-En/eclipse-workspace/Pacman/keyboardAgents.py
+layout|/Users/Shuo-En/eclipse-workspace/Pacman/layout.py
+pacman|/Users/Shuo-En/eclipse-workspace/Pacman/pacman.py
+pacmanAgents|/Users/Shuo-En/eclipse-workspace/Pacman/pacmanAgents.py
+search|/Users/Shuo-En/eclipse-workspace/Pacman/search.py
+searchAgents|/Users/Shuo-En/eclipse-workspace/Pacman/searchAgents.py
+textDisplay|/Users/Shuo-En/eclipse-workspace/Pacman/textDisplay.py
+util|/Users/Shuo-En/eclipse-workspace/Pacman/util.py

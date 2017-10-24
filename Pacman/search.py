@@ -90,8 +90,9 @@ def depthFirstSearch(problem):
   visit = set()
   #print problem.getStartState()
   #print problem.getSuccessors(problem.getStartState())
-  stk.push((problem.getStartState(), []))
-  visit.add(problem.getStartState())
+  curr = problem.getStartState()
+  stk.push((curr, []))
+  visit.add(curr)
   
   while stk.isEmpty() is False:
     curr = stk.pop()
@@ -111,8 +112,9 @@ def breadthFirstSearch(problem):
   
   que = Queue() # 2-tuple
   visit = set()
-  que.push((problem.getStartState(), []))
-  visit.add(problem.getStartState())
+  curr = problem.getStartState()
+  que.push((curr, []))
+  visit.add(curr)
   
   while que.isEmpty() is False:
     curr = que.pop()

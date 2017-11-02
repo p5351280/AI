@@ -130,6 +130,26 @@ def breadthFirstSearch(problem):
 def uniformCostSearch(problem):
   "Search the node of least total cost first. "
   "*** YOUR CODE HERE ***"
+  from util import PriorityQueue
+  
+  pque = PriorityQueue()
+  visit = set()
+  curr = problem.getStartState()
+  pque.push((curr, [], 0), 0) # third tuple store cost until it
+  
+  while pque.isEmpty() is False:
+    curr = pque.pop()
+    if curr[0] in visit:
+      continue
+    visit.add(curr[0])
+    if problem.isGoalState(curr[0]) is True:
+      return curr[1]
+    for nxt in problem.getSuccessors(curr[0]):
+      if nxt[0] in visit:
+        continue
+      cost = curr[2]+nxt[2]
+      pque.push((nxt[0], curr[1]+[nxt[1]], cost), cost)
+                        
   util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -142,6 +162,26 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
+  from util import PriorityQueue
+  
+  pque = PriorityQueue()
+  visit = set()
+  curr = problem.getStartState()
+  pque.push((curr, [], 0), heuristic(curr, problem))
+  
+  while pque.isEmpty() is False:
+    curr = pque.pop()
+    #if curr[0] in visit:
+    #  continue
+    visit.add(curr[0])
+    if problem.isGoalState(curr[0]) is True:
+      return curr[1]
+    for nxt in problem.getSuccessors(curr[0]):
+    #  if nxt[0] in visit:
+    #    continue
+      pque.push((nxt[0], curr[1]+[nxt[1]], curr[2]+nxt[2]), 
+                curr[2]+nxt[2]+heuristic(nxt[0], problem))
+  
   util.raiseNotDefined()
     
   

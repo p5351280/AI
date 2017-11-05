@@ -102,7 +102,8 @@ def depthFirstSearch(problem):
       if nxt[0] not in visit:
         stk.push((nxt[0], curr[1]+[nxt[1]]))
         visit.add(nxt[0])
-    
+  print "No Path!"
+  exit()    
   util.raiseNotDefined()
 
 def breadthFirstSearch(problem):
@@ -124,7 +125,8 @@ def breadthFirstSearch(problem):
       if nxt[0] not in visit:
         que.push((nxt[0], curr[1]+[nxt[1]]))
         visit.add(nxt[0])
-  
+  print "No Path!"
+  exit()
   util.raiseNotDefined()
       
 def uniformCostSearch(problem):
@@ -139,6 +141,7 @@ def uniformCostSearch(problem):
   
   while pque.isEmpty() is False:
     curr = pque.pop()
+    #print 'Start', curr
     if curr[0] in visit:
       continue
     visit.add(curr[0])
@@ -149,6 +152,7 @@ def uniformCostSearch(problem):
         continue
       cost = curr[2]+nxt[2]
       pque.push((nxt[0], curr[1]+[nxt[1]], cost), cost)
+      #print (nxt[0], curr[1]+[nxt[1]], cost)
                         
   util.raiseNotDefined()
 
@@ -171,14 +175,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
   
   while pque.isEmpty() is False:
     curr = pque.pop()
-    #if curr[0] in visit:
-    #  continue
+    if curr[0] in visit:
+      continue
     visit.add(curr[0])
     if problem.isGoalState(curr[0]) is True:
       return curr[1]
     for nxt in problem.getSuccessors(curr[0]):
-    #  if nxt[0] in visit:
-    #    continue
+      if nxt[0] in visit:
+        continue
       pque.push((nxt[0], curr[1]+[nxt[1]], curr[2]+nxt[2]), 
                 curr[2]+nxt[2]+heuristic(nxt[0], problem))
   

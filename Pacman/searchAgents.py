@@ -5,6 +5,7 @@
 # purposes. The Pacman AI projects were developed at UC Berkeley, primarily by
 # John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
+from tables.tests.test_queries import nxtype_from_type
 
 """
 This file contains all of the agents that can be selected to 
@@ -281,11 +282,16 @@ class CornersProblem(search.SearchProblem):
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
     "*** YOUR CODE HERE ***"
+    cornerVisit = []
+    return (self.startingPosition, tuple(cornerVisit))
     util.raiseNotDefined()
     
   def isGoalState(self, state):
     "Returns whether this search state is a goal state of the problem"
     "*** YOUR CODE HERE ***"
+    if len(state[1]) == 4:
+      return True
+    return False
     util.raiseNotDefined()
        
   def getSuccessors(self, state):
@@ -308,9 +314,19 @@ class CornersProblem(search.SearchProblem):
       #   dx, dy = Actions.directionToVector(action)
       #   nextx, nexty = int(x + dx), int(y + dy)
       #   hitsWall = self.walls[nextx][nexty]
-      
       "*** YOUR CODE HERE ***"
-      
+      x,y = state[0]
+      dx, dy = Actions.directionToVector(action)
+      nextx, nexty = int(x + dx), int(y + dy)
+      hitsWall = self.walls[nextx][nexty]
+      if hitsWall:  continue
+      nxt = (nextx, nexty)
+      cornerVisit = list(state[1])
+      if nxt in self.corners:
+        if nxt not in cornerVisit:
+          cornerVisit = cornerVisit+[nxt]
+          cornerVisit.sort()
+      successors = successors + [((nxt, tuple(cornerVisit)), action, 1)]
     self._expanded += 1
     return successors
 

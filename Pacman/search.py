@@ -184,7 +184,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
       if nxt[0] in visit:
         continue
       pque.push((nxt[0], curr[1]+[nxt[1]], curr[2]+nxt[2]), 
-                curr[2]+nxt[2]+heuristic(nxt[0], problem))
+                curr[2]+nxt[2]+heuristic(nxt[0], problem)) # f(n) = g(n)+h(n)
   
   util.raiseNotDefined()
     

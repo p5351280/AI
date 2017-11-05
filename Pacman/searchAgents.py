@@ -6,6 +6,7 @@
 # John DeNero (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
 # For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
 from tables.tests.test_queries import nxtype_from_type
+import dis
 
 """
 This file contains all of the agents that can be selected to 
@@ -282,7 +283,7 @@ class CornersProblem(search.SearchProblem):
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
     "*** YOUR CODE HERE ***"
-    cornerVisit = []
+    cornerVisit = set()
     return (self.startingPosition, tuple(cornerVisit))
     util.raiseNotDefined()
     
@@ -321,11 +322,9 @@ class CornersProblem(search.SearchProblem):
       hitsWall = self.walls[nextx][nexty]
       if hitsWall:  continue
       nxt = (nextx, nexty)
-      cornerVisit = list(state[1])
+      cornerVisit = set(state[1])
       if nxt in self.corners:
-        if nxt not in cornerVisit:
-          cornerVisit = cornerVisit+[nxt]
-          cornerVisit.sort()
+        cornerVisit.add(nxt)
       successors = successors + [((nxt, tuple(cornerVisit)), action, 1)]
     self._expanded += 1
     return successors
@@ -360,9 +359,31 @@ def cornersHeuristic(state, problem):
   """
   corners = problem.corners # These are the corner coordinates
   walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
-  
   "*** YOUR CODE HERE ***"
-  return 0 # Default to trivial solution
+  from util import manhattanDistance
+  
+  if problem.isGoalState(state):
+    return 0
+  
+  cornerUnVisit = set()
+  for node in corners:
+    if node not in state[1]:
+      cornerUnVisit.add(node)
+  
+  current = state[0]
+  total = 0
+  while len(cornerUnVisit) > 0:
+    mini = 2**64
+    for node in cornerUnVisit:
+      dist = manhattanDistance(current, node)
+      if mini > dist:
+        mini = dist
+        mininode = node
+    total += mini
+    current = mininode
+    cornerUnVisit.remove(mininode)
+  #print state[0], total
+  return total
 
 class AStarCornersAgent(SearchAgent):
   "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"

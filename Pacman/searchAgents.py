@@ -368,7 +368,7 @@ def cornersHeuristic(state, problem):
   cornerUnVisit = set()
   for node in corners:
     if node not in state[1]:
-      cornerUnVisit.add(node)
+      cornerUnVisit.add(node) # find the corner haven't visit
   
   current = state[0]
   total = 0
@@ -376,11 +376,11 @@ def cornersHeuristic(state, problem):
     mini = 2**64
     for node in cornerUnVisit:
       dist = manhattanDistance(current, node)
-      if mini > dist:
+      if mini > dist: # find the minimum distance to the corner from the state  
         mini = dist
         mininode = node
-    total += mini
-    current = mininode
+    total += mini # the whole h(n) to get to the goalState
+    current = mininode  # next step will find which corner is closet to this corner
     cornerUnVisit.remove(mininode)
   #print state[0], total
   return total

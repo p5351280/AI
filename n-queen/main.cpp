@@ -5,8 +5,11 @@
 #include <ctime>
 #include <algorithm>
 #include <cstring>
+#include <queue>
 
 using namespace std;
+
+#define MAP_PQ priority_queue<vector<int>, vector<vector<int>>, comp>
 
 const int MAX_INT(2147483647);
 map<vector<int>, int> attack;
@@ -107,13 +110,100 @@ bool HC(int n, int &countAtk){
 	}
 }
 
-bool GA(int n, int &countAtk){
+struct comp{
+	bool operator() (const vector<int> x, const vector<int> y){
+		return checkForAttack(x) > checkForAttack(y);
+	}
+};
 
+bool checkInMap(vector<int> mp, int target, int start, int end){
+	for(int i=start; i<=end; i++)
+		if(mp[i] == target)	return true;
+	return false;
+}
+
+vector<int> crossover(vector<int> p1, vector<int> p2){
+    /*
+    for(int j=0; j<9; j++)
+        cout<<p1[j]<<" ";
+    cout<<endl;
+    for(int j=0; j<9; j++)
+        cout<<p2[j]<<" ";
+    cout<<endl;
+    */
+    
+    int size = p1.size();
+	int start = rand() % (size/2), end = start + size/2;
+    //cout<<start<<" "<<end<<endl;
+	int mapList[10000] = {0}, i;
+	for(i=start; i<=end; i++)
+		mapList[p1[i]] = p2[i];
+	vector<int> child = p2;
+	for(i=start; i<=end; i++)
+		child[i] = p1[i];
+    /*
+    for(int j=0; j<9; j++)
+        cout<<child[j]<<" ";
+    cout<<endl;
+    */
+	for(i=0; i<start; i++){
+		if(mapList[child[i]]){
+			int target = mapList[child[i]];
+			while(checkInMap(child, target, start, end))
+				target = mapList[target];
+			child[i] = target;
+		}
+	}
+	for(i=end+1; i<child.size(); i++){
+		if(mapList[child[i]]){
+			int target = mapList[child[i]];
+			while(checkInMap(child, target, start, end))
+				target = mapList[target];
+			child[i] = target;
+		}
+	}
+    /*
+    for(int j=0; j<9; j++)
+        cout<<child[j]<<" ";
+    cout<<endl<<endl;
+    */
+	return child;
+}
+
+vector<int> mutation(vector<int> curr){
+	int a = rand() % curr.size();
+	int b = rand() % curr.size();
+	swap(curr[a], curr[b]);
+	return curr;
+}
+
+vector<int> GA_calc(int n){
+	MAP_PQ group, new_group;
+	for(int i=0; i<100; i++){
+		vector<int> temp = mapGenerate(n);
+		group.push(temp);
+	}
+	
+	return group.top();
+}
+
+bool GA(int n, int &countAtk){
+	vector<int> sol = GA_calc(n);
+	if(checkForAttack(sol) == 0){
+		cout << "Succedd!\n";
+		return true;
+	}
+	else{
+		cout << "Fail!\n";
+		return false;
+	}
 }
 
 int main(){
+	
 	srand(time(NULL));
-	int n, mode, countOpt(0), countAtk(0), time(30);
+	
+    int n, mode, countOpt(0), countAtk(0), time(30);
 	cout << "Input n : ";
 	cin >> n;
 	cout << "Input mode (HC 1, GA 2) : ";
@@ -131,5 +221,11 @@ int main(){
 	}
 	cout << "Succedd rate : " << (double)countOpt/time * 100 << "%\n";
 	cout << "Average attacks : " << (double)countAtk/time << endl;
-
+    /*
+	for(int i=0; i<100; i++){
+		vector<int> mp1 = mapGenerate(9);
+		vector<int> mp2 = mapGenerate(9);
+		vector<int> mp3 = crossover(mp1, mp2);
+	}
+    */
 }

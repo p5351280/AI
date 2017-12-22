@@ -73,7 +73,7 @@ vector<int> HC_calc(int size){
 	vector<int> temp, next;
 	while(1){
 		int minAtk = MAX_INT;
-		for(int i=0; i<size-1; i++){
+		for(int i=0; i<size-1; i++){	// swap each column is a kind of neighbor
 			for(int j=i+1; j<size; j++){
 				temp = curr;
 				swap(temp[i], temp[j]);
@@ -93,13 +93,13 @@ vector<int> HC_calc(int size){
 	exit(-1);
 }
 
-bool checkInMap(vector<int> mp, int target, int start, int end){
+bool checkInMap(vector<int> mp, int target, int start, int end){	// function for crossover to use
 	for(int i=start; i<=end; i++)
 		if(mp[i] == target)    return true;
 	return false;
 }
 
-vector<int> crossover(vector<int> p1, vector<int> p2){
+vector<int> crossover(vector<int> p1, vector<int> p2){	// PMX
 	/*
 	   for(int j=0; j<9; j++)
 	   cout<<p1[j]<<" ";
@@ -109,7 +109,7 @@ vector<int> crossover(vector<int> p1, vector<int> p2){
 	   cout<<endl;
 	 */
 	int size = p1.size();
-	int start = rand() % size, end = rand() % size;
+	int start = rand() % size, end = rand() % size;	// choose substring random
 	if(start > end)	swap(start, end);
 	//cout<<start<<" "<<end<<endl;
 	int mapList[10000] = {0}, i;
@@ -147,7 +147,7 @@ vector<int> crossover(vector<int> p1, vector<int> p2){
 	return child;
 }
 
-vector<int> mutation(vector<int> curr){
+vector<int> mutation(vector<int> curr){	// random choose two, and do swap
 	int a = rand() % curr.size();
 	int b = rand() % curr.size();
 	swap(curr[a], curr[b]);
@@ -160,8 +160,8 @@ struct comp{
 	}
 };
 
-vector<int> GA_calc(int size, int countGroup = 100, int round = 500){
-	priority_queue<vector<int>, vector<vector<int>>, comp> group, newGroup;
+vector<int> GA_calc(int size, int countGroup = 100, int round = 250){	// population size = 100, do 250 rounds
+	priority_queue<vector<int>, vector<vector<int> >, comp> group, newGroup;
 	for(int i=0; i<countGroup; i++){
 		vector<int> temp = mapGenerate(size);
 		group.push(temp);
@@ -170,7 +170,7 @@ vector<int> GA_calc(int size, int countGroup = 100, int round = 500){
 	for(int i=0; i<round; i++){
 		while(!newGroup.empty())	newGroup.pop();	// clear
 		for(int j=0; j<countGroup-1; j++){
-			vector<int> a = group.top();
+			vector<int> a = group.top();	// parent is choose by (0, 1), (1, 2), (2, 3)...
 			newGroup.push(a);
 			group.pop();
 			vector<int> b = group.top();
@@ -187,15 +187,20 @@ vector<int> GA_calc(int size, int countGroup = 100, int round = 500){
 	return newGroup.top();
 }
 
-int main(){
+int main(int argc, char* argv[]){
 
 	srand(time(NULL));
-
 	int n, mode, countOpt(0), countAtk(0), time(30);
-	cout << "Input n : ";
-	cin >> n;
-	cout << "Input mode (HC 1, GA 2) : ";
-	cin >> mode;
+	if(argc == 1){
+		cout << "Input n : ";
+		cin >> n;
+		cout << "Input mode (HC 1, GA 2) : ";
+		cin >> mode;
+	}
+	else{
+		n = atoi(argv[1]);	// for time test, can just use arg
+		mode = atoi(argv[2]);
+	}
 	for(int i=0; i<time; i++){
 		if(mode == 1){
 			vector<int> sol = HC_calc(n);

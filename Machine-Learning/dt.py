@@ -8,7 +8,6 @@ Created on Sat Dec 23 01:58:13 2017
 
 import numpy as np
 import pandas
-import random
 from sklearn import preprocessing, metrics, tree, model_selection
 
 DATA = pandas.read_csv('TraData.csv', dtype={'click': np.float64}).as_matrix()
@@ -16,12 +15,9 @@ DATA = pandas.read_csv('TraData.csv', dtype={'click': np.float64}).as_matrix()
 for i in range(0, 12):  
     label_encoder = preprocessing.LabelEncoder()
     encode = label_encoder.fit_transform(DATA[:, i].astype(str))
-    for j in range(0, len(encode)):
-        encode[j] = float(encode[j])
     DATA[:, i] = encode
 
 DATA = np.array(DATA, dtype='float')
-random.shuffle(DATA)
 DATA_X = DATA[:, 0:12]
 DATA_Y = DATA[:, 12:13]
 

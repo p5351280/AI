@@ -8,7 +8,6 @@ Created on Sat Dec 23 02:22:07 2017
 
 import numpy as np
 import pandas
-import random
 from sklearn import preprocessing, metrics, model_selection
 from sklearn.ensemble import RandomForestClassifier
 
@@ -22,7 +21,6 @@ for i in range(0, 12):
     DATA[:, i] = encode
 
 DATA = np.array(DATA, dtype='float')
-random.shuffle(DATA)
 DATA_X = DATA[:, 0:12]
 DATA_Y = DATA[:, 12:13]
 

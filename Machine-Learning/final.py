@@ -8,7 +8,7 @@ Created on Sat Dec 23 01:58:13 2017
 
 import numpy as np
 import pandas
-from sklearn import preprocessing, tree
+from sklearn import preprocessing
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 
 TRAIN = pandas.read_csv('TraData.csv', dtype={'click': np.float64}).as_matrix()
@@ -37,9 +37,10 @@ train = TRAIN[:, 0:12]
 train_ans = TRAIN[:, 12:13]
 
 clf = AdaBoostClassifier(
-        RandomForestClassifier(class_weight = {0:1, 1:10}, max_features=None, 
-                               n_jobs=-1),
+        RandomForestClassifier(class_weight = {0:1, 1:10}, 
+                               max_features=None, n_jobs=-1),
         n_estimators = 40, learning_rate = 0.05)
+
 clf.fit(train, train_ans.ravel())
 
 test = TEST[:, 0:12]
